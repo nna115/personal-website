@@ -61,8 +61,9 @@
         <div class="hero-scale-text"
           :style="{ transform: `translateY(${ctaY}px)`, opacity: Math.max(0, 1 - scrollProgress * 1.5) }">
           <div class="flex flex-col sm:flex-row gap-4 justify-center">
-            <a href="#projects"
-              class="group relative px-10 py-5 bg-gradient-to-r from-accent to-purple-500 text-white rounded-2xl font-semibold text-sm tracking-wide hover:shadow-2xl hover:shadow-accent/25 transition-all duration-500 btn-shine cursor-pointer">
+            <a href="#projects" ref="magneticBtn1"
+              class="group relative px-10 py-5 bg-gradient-to-r from-accent to-purple-500 text-white rounded-2xl font-semibold text-sm tracking-wide hover:shadow-2xl hover:shadow-accent/25 transition-all duration-500 btn-shine cursor-pointer"
+              :style="{ transform: `translate(${magneticOffset1.x}px, ${magneticOffset1.y}px)` }">
               <span class="relative z-10 flex items-center gap-2 justify-center">
                 查看作品
                 <svg class="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -70,8 +71,9 @@
                 </svg>
               </span>
             </a>
-            <a href="#contact"
-              class="px-10 py-5 glass-card text-primary-700 rounded-2xl font-semibold text-sm tracking-wide hover:text-accent cursor-pointer">
+            <a href="#contact" ref="magneticBtn2"
+              class="px-10 py-5 glass-card text-primary-700 rounded-2xl font-semibold text-sm tracking-wide hover:text-accent cursor-pointer"
+              :style="{ transform: `translate(${magneticOffset2.x}px, ${magneticOffset2.y}px)` }">
               联系我
             </a>
           </div>
@@ -93,6 +95,7 @@
 
 <script setup lang="ts">
 import { ref, reactive, computed, onMounted, onUnmounted } from 'vue'
+import { useMagnetic } from '../composables/useInteraction'
 
 const scrollProgress = ref(0)
 const charRevealed = ref<boolean[]>([])
@@ -104,6 +107,14 @@ const nameChars = computed(() => name.split(''))
 const orbFar = reactive({ x: 0, y: 0 })
 const orbMid = reactive({ x: 0, y: 0 })
 const orbNear = reactive({ x: 0, y: 0 })
+
+// Magnetic buttons
+const magneticBtn1 = ref<HTMLElement>()
+const magneticBtn2 = ref<HTMLElement>()
+const { offsetX: mx1, offsetY: my1 } = useMagnetic(magneticBtn1, { strength: 0.35, range: 120 })
+const { offsetX: mx2, offsetY: my2 } = useMagnetic(magneticBtn2, { strength: 0.35, range: 120 })
+const magneticOffset1 = computed(() => ({ x: mx1.value, y: my1.value }))
+const magneticOffset2 = computed(() => ({ x: mx2.value, y: my2.value }))
 
 const greetingY = computed(() => -scrollProgress.value * 300)
 const nameY = computed(() => -scrollProgress.value * 200)

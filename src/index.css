@@ -382,6 +382,101 @@ body {
 }
 
 /* ============================
+   Page Transitions
+   ============================ */
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(20px);
+  filter: blur(4px);
+}
+.page-leave-to {
+  opacity: 0;
+  transform: translateY(-20px);
+  filter: blur(4px);
+}
+
+/* ============================
+   Custom Cursor
+   ============================ */
+@media (pointer: fine) {
+  *, a, button, [role="button"], .cursor-pointer {
+    cursor: none !important;
+  }
+}
+
+.custom-cursor-container {
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  mix-blend-mode: difference;
+}
+
+.custom-cursor-ring {
+  position: fixed;
+  width: 32px;
+  height: 32px;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  border-radius: 50%;
+  transition: width 0.3s, height 0.3s, border-color 0.3s, opacity 0.3s;
+  will-change: transform;
+}
+
+.custom-cursor-ring.hover {
+  width: 48px;
+  height: 48px;
+  border-color: rgba(255, 255, 255, 1);
+}
+
+.custom-cursor-dot {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  background: white;
+  border-radius: 50%;
+  will-change: transform;
+  transition: opacity 0.3s;
+}
+
+.custom-cursor-trail {
+  position: fixed;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+  will-change: transform;
+  pointer-events: none;
+}
+
+/* ============================
+   Particles Canvas
+   ============================ */
+.particles-canvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ============================
+   Scramble Text
+   ============================ */
+.scramble-text {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* ============================
+   3D Tilt Card
+   ============================ */
+.tilt-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ============================
    Reduced Motion
    ============================ */
 @media (prefers-reduced-motion: reduce) {

@@ -22,7 +22,7 @@
           </div>
 
           <!-- Stats -->
-          <div class="grid grid-cols-3 gap-4 mt-12">
+          <div class="grid grid-cols-3 gap-4 mt-12" :style="parallaxStyle">
             <div v-for="(stat, i) in stats" :key="stat.label"
               class="reveal-scale text-center p-5 rounded-2xl glass-iridescent"
               :ref="onStatRef"
@@ -71,10 +71,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useScrollReveal } from '../composables/useScroll'
+import { useMouseParallax } from '../composables/useInteraction'
 
 const { observe, observeAll } = useScrollReveal()
+const { x: mouseX, y: mouseY } = useMouseParallax(0.015)
 
 const headerRef = ref<HTMLElement>()
 const bioRef = ref<HTMLElement>()
@@ -83,6 +85,10 @@ const highlightRef = ref<HTMLElement>()
 
 const onStatRef = (el: any) => observe(el)
 const onSkillRef = (el: any) => observe(el)
+
+const parallaxStyle = computed(() => ({
+  transform: `translate(${mouseX.value}px, ${mouseY.value}px)`,
+}))
 
 const stats = [
   { value: '3+', label: '年经验' },

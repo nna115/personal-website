@@ -13,10 +13,13 @@
       </div>
 
       <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
-        <div v-for="(project, index) in projects" :key="project.name"
-          class="group relative glass-iridescent rounded-3xl overflow-hidden hover-lift cursor-pointer reveal-up"
+        <RouterLink v-for="(project, index) in projects" :key="project.name"
+          :to="`/projects/${project.id}`"
+          class="group relative glass-iridescent rounded-3xl overflow-hidden hover-lift cursor-pointer reveal-up block tilt-card"
           :ref="onCardRef"
-          :style="{ transitionDelay: `${index * 0.12}s` }">
+          :style="{ transitionDelay: `${index * 0.12}s` }"
+          @mousemove="(e) => onTiltMove(e, index)"
+          @mouseleave="() => onTiltLeave(index)">
 
           <div class="h-[2px] w-full" :class="project.accent"></div>
 
@@ -49,7 +52,7 @@
               </svg>
             </div>
           </div>
-        </div>
+        </RouterLink>
       </div>
     </div>
   </section>
@@ -57,6 +60,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { RouterLink } from 'vue-router'
 import { useScrollReveal } from '../composables/useScroll'
 
 const { observe } = useScrollReveal()
@@ -64,12 +68,31 @@ const { observe } = useScrollReveal()
 const headerRef = ref<HTMLElement>()
 const cardRefs = ref<HTMLElement[]>([])
 const parallaxX = ref(0)
+
+// Tilt effect
+const onTiltMove = (e: MouseEvent, index: number) => {
+  const el = cardRefs.value[index]
+  if (!el) return
+  const rect = el.getBoundingClientRect()
+  const x = (e.clientX - rect.left) / rect.width
+  const y = (e.clientY - rect.top) / rect.height
+  const rotateX = (0.5 - y) * 12
+  const rotateY = (x - 0.5) * 12
+  el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02,1.02,1)`
+}
+
+const onTiltLeave = (index: number) => {
+  const el = cardRefs.value[index]
+  if (!el) return
+  el.style.transform = ''
+}
 const parallaxY = ref(0)
 
 const onCardRef = (el: any) => {
-  if (el && !cardRefs.value.includes(el)) {
-    cardRefs.value.push(el)
-    observe(el)
+  const element = el?.$el || el
+  if (element && element.nodeType === 1 && !cardRefs.value.includes(element)) {
+    cardRefs.value.push(element)
+    observe(element)
   }
 }
 
@@ -83,6 +106,7 @@ const loop = () => {
 
 const projects = [
   {
+    id: 'admin-system',
     name: '中后台管理系统',
     description: '基于 Vue 3 + Element Plus 的企业级中后台解决方案，包含权限管理、数据可视化等功能。',
     tech: ['Vue 3', 'TypeScript', 'Element Plus', 'VXE-Table'],
@@ -93,6 +117,7 @@ const projects = [
     iconColor: 'text-blue-500',
   },
   {
+    id: 'data-dashboard',
     name: '数据看板',
     description: '实时数据监控大屏，支持多种图表展示和数据导出功能。',
     tech: ['Vue 3', 'ECharts', 'Tailwind CSS'],
@@ -103,6 +128,7 @@ const projects = [
     iconColor: 'text-emerald-500',
   },
   {
+    id: 'component-docs',
     name: '组件库文档',
     description: '自研 UI 组件库的文档站点，包含组件预览和代码示例。',
     tech: ['Vue 3', 'Vite', 'Markdown'],
@@ -113,6 +139,7 @@ const projects = [
     iconColor: 'text-purple-500',
   },
   {
+    id: 'personal-blog',
     name: '个人博客',
     description: '使用 Vue 3 构建的静态博客，支持文章分类和搜索功能。',
     tech: ['Vue 3', 'VitePress', 'TypeScript'],
