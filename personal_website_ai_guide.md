@@ -18,6 +18,7 @@
 ## 页面结构
 
 ### 1. 首页 (Hero)
+
 - 显示姓名、职位、简短自我介绍
 - CTA 按钮：
   - 查看作品 → 跳转到项目部分
@@ -25,6 +26,7 @@
 - 可包含头像或背景图
 
 ### 2. 关于我 (About)
+
 - 技能栈：
   - Vue 3, TypeScript, Element Plus, VXE-Table
   - 前端工程化、组件化开发经验
@@ -34,6 +36,7 @@
   - 主要方向
 
 ### 3. 项目作品 (Projects)
+
 - 每个项目卡片：
   - 项目名称
   - 简短描述
@@ -42,6 +45,7 @@
 - 可采用 Grid 布局
 
 ### 4. 联系方式 (Contact)
+
 - 邮箱
 - GitHub / GitLab
 - LinkedIn
@@ -49,7 +53,7 @@
 
 ## UI 设计和样式
 
-- **字体**：系统字体或 Google Fonts，例如 `Inter`  
+- **字体**：系统字体或 Google Fonts，例如 `Inter`
 - **颜色**：
   - 主色：#3b82f6（蓝色，用于按钮和高亮）
   - 背景色：#f8fafc
@@ -82,17 +86,28 @@ src/
 ```
 
 ### 示例组件 (Hero.vue)
+
 ```vue
 <template>
-  <section class="min-h-screen flex flex-col justify-center items-center bg-[#f8fafc] text-slate-900">
+  <section
+    class="min-h-screen flex flex-col justify-center items-center bg-[#f8fafc] text-slate-900"
+  >
     <p class="text-sm font-medium text-blue-600">Hello, I'm</p>
-    <h1 class="text-5xl font-bold">林嘉铧</h1>
+    <h1 class="text-5xl font-bold">赖工</h1>
     <p class="mt-6 text-lg text-slate-600 max-w-xl text-center">
       我是一名前端开发者，专注于 Vue 3、TypeScript、组件化开发和中后台系统建设。
     </p>
     <div class="mt-10 flex gap-4">
-      <a href="#projects" class="rounded-xl bg-slate-900 px-5 py-3 text-white hover:bg-slate-700">查看作品</a>
-      <a href="mailto:your-email@example.com" class="rounded-xl border border-slate-300 px-5 py-3 hover:bg-white">联系我</a>
+      <a
+        href="#projects"
+        class="rounded-xl bg-slate-900 px-5 py-3 text-white hover:bg-slate-700"
+        >查看作品</a
+      >
+      <a
+        href="mailto:your-email@example.com"
+        class="rounded-xl border border-slate-300 px-5 py-3 hover:bg-white"
+        >联系我</a
+      >
     </div>
   </section>
 </template>
