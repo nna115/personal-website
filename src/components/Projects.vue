@@ -12,14 +12,12 @@
         <h2 class="text-4xl md:text-5xl font-heading font-bold text-primary-800">项目作品</h2>
       </div>
 
-      <div class="grid md:grid-cols-2 gap-6 lg:gap-8">
-        <RouterLink v-for="(project, index) in projects" :key="project.name"
+      <div class="grid md:grid-cols-2 gap-6 lg:gap-8"
+        ref="gridRef">
+        <RouterLink v-for="project in projects" :key="project.name"
           :to="`/projects/${project.id}`"
-          class="group relative glass-iridescent rounded-3xl overflow-hidden hover-lift cursor-pointer reveal-up block tilt-card"
-          :ref="onCardRef"
-          :style="{ transitionDelay: `${index * 0.12}s` }"
-          @mousemove="(e) => onTiltMove(e, index)"
-          @mouseleave="() => onTiltLeave(index)">
+          class="group relative glass-iridescent rounded-3xl overflow-hidden cursor-pointer reveal-up block tilt-card"
+          :ref="onCardRef">
 
           <div class="h-[2px] w-full" :class="project.accent"></div>
 
@@ -66,34 +64,53 @@ import { useScrollReveal } from '../composables/useScroll'
 const { observe } = useScrollReveal()
 
 const headerRef = ref<HTMLElement>()
+const gridRef = ref<HTMLElement>()
 const cardRefs = ref<HTMLElement[]>([])
 const parallaxX = ref(0)
 
-// Tilt effect
-const onTiltMove = (e: MouseEvent, index: number) => {
-  const el = cardRefs.value[index]
-  if (!el) return
-  const rect = el.getBoundingClientRect()
-  const x = (e.clientX - rect.left) / rect.width
-  const y = (e.clientY - rect.top) / rect.height
-  const rotateX = (0.5 - y) * 12
-  const rotateY = (x - 0.5) * 12
-  el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02,1.02,1)`
-}
-
-const onTiltLeave = (index: number) => {
-  const el = cardRefs.value[index]
-  if (!el) return
-  el.style.transform = ''
-}
+// 3D tilt — per-card listeners + rAF lerp for silky smoothness
 const parallaxY = ref(0)
+interface TiltState { rx: number; ry: number; trx: number; try_: number }
+const tiltStateMap = new WeakMap<HTMLElement, TiltState>()
+const tiltElements: HTMLElement[] = []
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
 const onCardRef = (el: any) => {
   const element = el?.$el || el
   if (element && element.nodeType === 1 && !cardRefs.value.includes(element)) {
     cardRefs.value.push(element)
     observe(element)
+    const state: TiltState = { rx: 0, ry: 0, trx: 0, try_: 0 }
+    tiltStateMap.set(element, state)
+    tiltElements.push(element)
+    element.addEventListener('mousemove', (e: MouseEvent) => {
+      const rect = element.getBoundingClientRect()
+      const x = (e.clientX - rect.left) / rect.width
+      const y = (e.clientY - rect.top) / rect.height
+      state.trx = (0.5 - y) * 12
+      state.try_ = (x - 0.5) * 12
+    })
+    element.addEventListener('mouseleave', () => {
+      state.trx = 0
+      state.try_ = 0
+    })
   }
+}
+
+let tiltRafId = 0
+const tiltLoop = () => {
+  for (const el of tiltElements) {
+    const s = tiltStateMap.get(el)
+    if (!s) continue
+    s.rx = lerp(s.rx, s.trx, 0.12)
+    s.ry = lerp(s.ry, s.try_, 0.12)
+    if (Math.abs(s.rx) < 0.01 && Math.abs(s.ry) < 0.01 && s.trx === 0 && s.try_ === 0) {
+      el.style.transform = ''
+    } else {
+      el.style.transform = `perspective(800px) rotateX(${s.rx}deg) rotateY(${s.ry}deg) scale3d(1.02,1.02,1)`
+    }
+  }
+  tiltRafId = requestAnimationFrame(tiltLoop)
 }
 
 let rafId = 0
@@ -154,9 +171,11 @@ const projects = [
 onMounted(() => {
   observe(headerRef.value)
   rafId = requestAnimationFrame(loop)
+  tiltRafId = requestAnimationFrame(tiltLoop)
 })
 
 onUnmounted(() => {
   cancelAnimationFrame(rafId)
+  cancelAnimationFrame(tiltRafId)
 })
 </script>

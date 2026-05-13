@@ -17,6 +17,69 @@
 
       <!-- Content container -->
       <div class="relative z-10 text-center px-6 max-w-5xl mx-auto">
+        <!-- Logo with mouse-following internal light -->
+        <div class="hero-logo-wrap"
+          :style="{ transform: `translateY(${logoY}px)`, opacity: Math.max(0, 1 - scrollProgress * 3.5) }"
+          ref="logoRef"
+        >
+          <svg class="hero-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- Base gradient -->
+              <linearGradient id="heroLogoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#818CF8" />
+                <stop offset="100%" stop-color="#4F46E5" />
+              </linearGradient>
+              <!-- Glass reflection (static, top-to-bottom) -->
+              <linearGradient id="heroLogoGlass" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="white" stop-opacity="0.22" />
+                <stop offset="35%" stop-color="white" stop-opacity="0.06" />
+                <stop offset="100%" stop-color="white" stop-opacity="0" />
+              </linearGradient>
+              <!-- Ambient light (follows mouse) -->
+              <radialGradient id="heroLogoLight1" :cx="lgCx" :cy="lgCy" r="90%">
+                <stop offset="0%" stop-color="white" stop-opacity="0.32" />
+                <stop offset="100%" stop-color="white" stop-opacity="0" />
+              </radialGradient>
+              <!-- Specular highlight (follows mouse, tighter) -->
+              <radialGradient id="heroLogoLight2" :cx="lgCx" :cy="lgCy" r="50%">
+                <stop offset="0%" stop-color="white" stop-opacity="0.5" />
+                <stop offset="100%" stop-color="white" stop-opacity="0" />
+              </radialGradient>
+              <!-- Colored accent light (follows mouse, blue tint) -->
+              <radialGradient id="heroLogoLight3" :cx="lgCx" :cy="lgCy" r="70%">
+                <stop offset="0%" stop-color="#C7D2FE" stop-opacity="0.25" />
+                <stop offset="100%" stop-color="#C7D2FE" stop-opacity="0" />
+              </radialGradient>
+              <!-- Shadow (opposite to mouse) -->
+              <radialGradient id="heroLogoShadow" :cx="lsCx" :cy="lsCy" r="85%">
+                <stop offset="0%" stop-color="#1E1B4B" stop-opacity="0.3" />
+                <stop offset="100%" stop-color="#1E1B4B" stop-opacity="0" />
+              </radialGradient>
+              <clipPath id="heroLogoClip">
+                <rect x="8" y="8" width="104" height="104" rx="28" />
+              </clipPath>
+            </defs>
+            <g clip-path="url(#heroLogoClip)">
+              <!-- Base shape -->
+              <rect x="8" y="8" width="104" height="104" rx="28" fill="url(#heroLogoGrad)" />
+              <!-- Logo mark: < /> -->
+              <path d="M40 28 L24 60 L40 92" stroke="white" stroke-width="7" fill="none" opacity="0.9" stroke-linecap="round" stroke-linejoin="round" />
+              <path d="M80 28 L96 60 L80 92" stroke="white" stroke-width="7" fill="none" opacity="0.9" stroke-linecap="round" stroke-linejoin="round" />
+              <line x1="72" y1="32" x2="48" y2="88" stroke="white" stroke-width="6" opacity="0.5" stroke-linecap="round" />
+              <!-- Glass reflection -->
+              <rect x="8" y="8" width="104" height="104" rx="28" fill="url(#heroLogoGlass)" />
+              <!-- Light layers (follow mouse) -->
+              <rect x="8" y="8" width="104" height="104" rx="28" fill="url(#heroLogoLight1)" />
+              <rect x="8" y="8" width="104" height="104" rx="28" fill="url(#heroLogoLight2)" />
+              <rect x="8" y="8" width="104" height="104" rx="28" fill="url(#heroLogoLight3)" />
+              <!-- Shadow (opposite to mouse) -->
+              <rect x="8" y="8" width="104" height="104" rx="28" fill="url(#heroLogoShadow)" />
+              <!-- Subtle inner border -->
+              <rect x="8" y="8" width="104" height="104" rx="28" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1" />
+            </g>
+          </svg>
+        </div>
+
         <!-- Greeting -->
         <div class="hero-scale-text mb-4"
           :style="{ transform: `translateY(${greetingY}px) scale(${1 + scrollProgress * 0.8})`, opacity: Math.max(0, 1 - scrollProgress * 3) }">
@@ -108,6 +171,29 @@ const orbFar = reactive({ x: 0, y: 0 })
 const orbMid = reactive({ x: 0, y: 0 })
 const orbNear = reactive({ x: 0, y: 0 })
 
+// Logo mouse-following light (global — works from anywhere on page)
+const logoRef = ref<HTMLElement>()
+const logoMouse = reactive({ x: 50, y: 50 })
+const logoY = computed(() => -scrollProgress.value * 350)
+const lgCx = computed(() => logoMouse.x + '%')
+const lgCy = computed(() => logoMouse.y + '%')
+const lsCx = computed(() => (100 - logoMouse.x) + '%')
+const lsCy = computed(() => (100 - logoMouse.y) + '%')
+
+const onDocMouseMove = (e: MouseEvent) => {
+  const el = logoRef.value
+  if (!el) return
+  const rect = el.getBoundingClientRect()
+  const cx = rect.left + rect.width / 2
+  const cy = rect.top + rect.height / 2
+  const halfScreen = Math.min(window.innerWidth, window.innerHeight) / 2
+  const nx = (e.clientX - cx) / halfScreen
+  const ny = (e.clientY - cy) / halfScreen
+  // atan saturates naturally: ~0 at center, ~±50% at half-screen distance
+  logoMouse.x = 50 + (Math.atan(nx * 1.8) / Math.PI) * 100
+  logoMouse.y = 50 + (Math.atan(ny * 1.8) / Math.PI) * 100
+}
+
 // Magnetic buttons
 const magneticBtn1 = ref<HTMLElement>()
 const magneticBtn2 = ref<HTMLElement>()
@@ -157,9 +243,11 @@ onMounted(() => {
   }, 800)
 
   rafId = requestAnimationFrame(loop)
+  document.addEventListener('mousemove', onDocMouseMove, { passive: true })
 })
 
 onUnmounted(() => {
   cancelAnimationFrame(rafId)
+  document.removeEventListener('mousemove', onDocMouseMove)
 })
 </script>

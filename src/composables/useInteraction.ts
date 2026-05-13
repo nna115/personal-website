@@ -4,7 +4,7 @@ import { ref, onMounted, onUnmounted, type Ref } from 'vue'
  * Magnetic button effect — element attracts toward cursor when nearby.
  * Returns a ref to attach to the element and the computed transform style.
  */
-export function useMagnetic(el: Ref<HTMLElement | null | undefined>, options: {
+export function useMagnetic(el: Ref<any>, options: {
   strength?: number
   range?: number
 } = {}) {
@@ -16,10 +16,15 @@ export function useMagnetic(el: Ref<HTMLElement | null | undefined>, options: {
   let targetY = 0
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t
+  const getElement = () => {
+    const v = el.value
+    return (v?.$el || v) as HTMLElement | undefined
+  }
 
   const onMouseMove = (e: MouseEvent) => {
-    if (!el.value) return
-    const rect = el.value.getBoundingClientRect()
+    const element = getElement()
+    if (!element) return
+    const rect = element.getBoundingClientRect()
     const cx = rect.left + rect.width / 2
     const cy = rect.top + rect.height / 2
     const dx = e.clientX - cx
@@ -66,7 +71,7 @@ export function useMagnetic(el: Ref<HTMLElement | null | undefined>, options: {
  * 3D tilt effect — element tilts based on mouse position within it.
  * Returns a ref to attach and the computed transform style.
  */
-export function useTilt(el: Ref<HTMLElement | null | undefined>, options: {
+export function useTilt(el: Ref<any>, options: {
   maxTilt?: number
   perspective?: number
   scale?: number
@@ -82,10 +87,15 @@ export function useTilt(el: Ref<HTMLElement | null | undefined>, options: {
   let targetScale = 1
 
   const lerp = (a: number, b: number, t: number) => a + (b - a) * t
+  const getElement = () => {
+    const v = el.value
+    return (v?.$el || v) as HTMLElement | undefined
+  }
 
   const onMouseMove = (e: MouseEvent) => {
-    if (!el.value) return
-    const rect = el.value.getBoundingClientRect()
+    const element = getElement()
+    if (!element) return
+    const rect = element.getBoundingClientRect()
     const x = (e.clientX - rect.left) / rect.width
     const y = (e.clientY - rect.top) / rect.height
     targetX = (0.5 - y) * maxTilt
@@ -108,16 +118,18 @@ export function useTilt(el: Ref<HTMLElement | null | undefined>, options: {
   }
 
   onMounted(() => {
-    if (!el.value) return
-    el.value.addEventListener('mousemove', onMouseMove, { passive: true })
-    el.value.addEventListener('mouseleave', onMouseLeave)
+    const element = getElement()
+    if (!element) return
+    element.addEventListener('mousemove', onMouseMove, { passive: true })
+    element.addEventListener('mouseleave', onMouseLeave)
     rafId = requestAnimationFrame(loop)
   })
 
   onUnmounted(() => {
-    if (el.value) {
-      el.value.removeEventListener('mousemove', onMouseMove)
-      el.value.removeEventListener('mouseleave', onMouseLeave)
+    const element = getElement()
+    if (element) {
+      element.removeEventListener('mousemove', onMouseMove)
+      element.removeEventListener('mouseleave', onMouseLeave)
     }
     cancelAnimationFrame(rafId)
   })

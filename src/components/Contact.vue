@@ -71,23 +71,40 @@ const card1Ref = ref<HTMLElement>()
 const card2Ref = ref<HTMLElement>()
 const ctaRef = ref<HTMLElement>()
 
-// Tilt effect
-const cardRefs = [card1Ref, card2Ref]
+// Smooth tilt via rAF + lerp — plain arrays for rAF performance
+const tiltCards: HTMLElement[] = []
+const tiltState: { rx: number; ry: number }[] = []
+const tiltTargets: { rx: number; ry: number }[] = []
+const lerp = (a: number, b: number, t: number) => a + (b - a) * t
+
 const onTiltMove = (e: MouseEvent, index: number) => {
-  const el = cardRefs[index].value
+  const el = tiltCards[index]
   if (!el) return
   const rect = el.getBoundingClientRect()
   const x = (e.clientX - rect.left) / rect.width
   const y = (e.clientY - rect.top) / rect.height
-  const rotateX = (0.5 - y) * 12
-  const rotateY = (x - 0.5) * 12
-  el.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02,1.02,1)`
+  tiltTargets[index].rx = (0.5 - y) * 12
+  tiltTargets[index].ry = (x - 0.5) * 12
 }
 
 const onTiltLeave = (index: number) => {
-  const el = cardRefs[index].value
-  if (!el) return
-  el.style.transform = ''
+  tiltTargets[index].rx = 0
+  tiltTargets[index].ry = 0
+}
+
+let tiltRafId = 0
+const tiltLoop = () => {
+  for (let i = 0; i < tiltCards.length; i++) {
+    const el = tiltCards[i]
+    tiltState[i].rx = lerp(tiltState[i].rx, tiltTargets[i].rx, 0.12)
+    tiltState[i].ry = lerp(tiltState[i].ry, tiltTargets[i].ry, 0.12)
+    if (Math.abs(tiltState[i].rx) < 0.01 && Math.abs(tiltState[i].ry) < 0.01 && tiltTargets[i].rx === 0 && tiltTargets[i].ry === 0) {
+      el.style.transform = ''
+    } else {
+      el.style.transform = `perspective(800px) rotateX(${tiltState[i].rx}deg) rotateY(${tiltState[i].ry}deg) scale3d(1.02,1.02,1)`
+    }
+  }
+  tiltRafId = requestAnimationFrame(tiltLoop)
 }
 
 const email = 'your-email@example.com'
@@ -111,10 +128,19 @@ onMounted(() => {
   observe(card1Ref.value)
   observe(card2Ref.value)
   observe(ctaRef.value)
+  // Populate tilt arrays from DOM
+  const cards = document.querySelectorAll<HTMLElement>('#contact .tilt-card')
+  cards.forEach((el, i) => {
+    tiltCards[i] = el
+    tiltState[i] = { rx: 0, ry: 0 }
+    tiltTargets[i] = { rx: 0, ry: 0 }
+  })
   rafId = requestAnimationFrame(loop)
+  tiltRafId = requestAnimationFrame(tiltLoop)
 })
 
 onUnmounted(() => {
   cancelAnimationFrame(rafId)
+  cancelAnimationFrame(tiltRafId)
 })
 </script>

@@ -477,6 +477,28 @@ body {
 }
 
 /* ============================
+   Hero Logo — Mouse-following Internal Light
+   ============================ */
+.hero-logo-wrap {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+
+.hero-logo {
+  width: 140px;
+  height: 140px;
+  display: block;
+  filter: drop-shadow(0 8px 32px rgba(99, 102, 241, 0.3));
+  animation: logoFloat 6s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ============================
    Reduced Motion
    ============================ */
 @media (prefers-reduced-motion: reduce) {
