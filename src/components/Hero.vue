@@ -164,7 +164,7 @@ const scrollProgress = ref(0)
 const charRevealed = ref<boolean[]>([])
 const titleRevealed = ref(false)
 
-const name = '耄耋'
+const name = '乌萨奇'
 const nameChars = computed(() => name.split(''))
 
 const orbFar = reactive({ x: 0, y: 0 })
