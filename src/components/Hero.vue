@@ -93,7 +93,7 @@
             opacity: Math.max(0, 1 - scrollProgress * 2.5),
             zIndex: 1,
           }">
-          <h1 class="text-7xl md:text-9xl lg:text-[10rem] font-heading font-bold text-primary-800 leading-none tracking-tight select-none">
+          <h1 class="text-7xl md:text-9xl lg:text-[10rem] font-heading font-bold text-primary-800 dark:text-primary-100 leading-none tracking-tight select-none">
             <span v-for="(char, i) in nameChars" :key="i" class="inline-block scroll-word"
               :class="{ active: charRevealed[i] }"
               :style="{ transitionDelay: `${i * 0.08 + 0.3}s` }">{{ char }}</span>
@@ -107,7 +107,7 @@
             opacity: Math.max(0, 1 - scrollProgress * 2),
             zIndex: 2,
           }">
-          <p class="text-2xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-800">
+          <p class="text-2xl md:text-4xl lg:text-5xl font-heading font-bold text-primary-800 dark:text-primary-100">
             <span class="gradient-text">Frontend Developer</span>
           </p>
         </div>
@@ -135,7 +135,7 @@
               </span>
             </a>
             <a href="#contact" ref="magneticBtn2"
-              class="px-10 py-5 glass-card text-primary-700 rounded-2xl font-semibold text-sm tracking-wide hover:text-accent cursor-pointer"
+              class="px-10 py-5 glass-card text-primary-700 dark:text-primary-200 rounded-2xl font-semibold text-sm tracking-wide hover:text-accent cursor-pointer"
               :style="{ transform: `translate(${magneticOffset2.x}px, ${magneticOffset2.y}px)` }">
               联系我
             </a>
@@ -148,7 +148,7 @@
       <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
         :style="{ opacity: Math.max(0, 1 - scrollProgress * 4), transform: `translate(-50%, ${scrollProgress * 60}px)` }">
         <span class="text-xs text-primary-400 tracking-widest uppercase">Scroll</span>
-        <div class="w-5 h-8 border-2 border-primary-300 rounded-full flex justify-center pt-1.5">
+        <div class="w-5 h-8 border-2 border-primary-300 dark:border-primary-600 rounded-full flex justify-center pt-1.5">
           <div class="w-1 h-2 bg-accent rounded-full animate-bounce"></div>
         </div>
       </div>

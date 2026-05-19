@@ -1,13 +1,12 @@
 <template>
   <div class="min-h-screen relative noise-overlay">
-    <!-- Custom cursor -->
-    <CustomCursor />
     <!-- Mouse cursor glow effect -->
     <CursorGlow />
     <!-- Particles background -->
     <Particles />
     <!-- Iridescent background -->
     <div class="aurora-bg"></div>
+    <div class="aurora-bg-dark"></div>
 
     <!-- Scroll progress bar -->
     <div class="scroll-progress" :style="{ width: `${scrollProgress * 100}%` }"></div>
@@ -25,9 +24,9 @@
     </main>
 
     <!-- Footer -->
-    <footer class="relative z-10 py-12 border-t border-primary-200/50">
+    <footer class="relative z-10 py-12 border-t border-primary-200/50 dark:border-primary-700/50">
       <div class="max-w-6xl mx-auto px-6 text-center">
-        <p class="font-heading text-2xl text-primary-300 mb-2">Let's build something great together.</p>
+        <p class="font-heading text-2xl text-primary-300 dark:text-primary-500 mb-2">Let's build something great together.</p>
         <p class="text-sm text-primary-400">&copy; 2024 赖工. Crafted with care.</p>
       </div>
     </footer>
@@ -38,7 +37,6 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import { RouterView } from 'vue-router'
 import CursorGlow from './components/CursorGlow.vue'
-import CustomCursor from './components/CustomCursor.vue'
 import Particles from './components/Particles.vue'
 import Navbar from './components/Navbar.vue'
 

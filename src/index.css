@@ -4,21 +4,117 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global theme transition */
+*,
+*::before,
+*::after {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 0s;
+}
+
+.dark-transition *,
+.dark-transition *::before,
+.dark-transition *::after {
+  transition-duration: 1s !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 80px;
+  transition: color 1s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 body {
   font-family: 'Jost', system-ui, sans-serif;
-  background: #F0F4FF;
   color: #1E293B;
   overflow-x: hidden;
+  transition: color 1s cubic-bezier(0.4, 0, 0.2, 1), background-color 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background-color: #F0F4FF;
+}
+
+.dark body,
+.dark {
+  color: #E2E8F0;
+  background-color: #0B1120;
 }
 
 ::selection {
   background-color: #6366F1;
   color: white;
+}
+
+/* ============================
+   Dark Mode Overrides
+   ============================ */
+
+.dark .glass {
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 4px 24px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .glass-strong {
+  background: rgba(15, 23, 42, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .glass-card {
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.15),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.dark .glass-card:hover {
+  background: rgba(15, 23, 42, 0.65);
+  border-color: rgba(99, 102, 241, 0.3);
+  box-shadow:
+    0 8px 32px rgba(99, 102, 241, 0.15),
+    0 0 0 1px rgba(99, 102, 241, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.dark .glass-iridescent {
+  background: rgba(15, 23, 42, 0.4);
+  border: 1px solid transparent;
+}
+
+.dark ::-webkit-scrollbar-track { background: #0B1120; }
+.dark ::-webkit-scrollbar-thumb { background: #334155; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+.dark .section-glow-line {
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(99, 102, 241, 0.15) 20%,
+    rgba(168, 85, 247, 0.2) 50%,
+    rgba(99, 102, 241, 0.15) 80%,
+    transparent 100%
+  );
+}
+
+.dark .light-orb-1 {
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.15) 0%, rgba(168, 85, 247, 0.06) 50%, transparent 70%);
+}
+.dark .light-orb-2 {
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.12) 0%, rgba(244, 114, 182, 0.05) 50%, transparent 70%);
+}
+.dark .light-orb-3 {
+  background: radial-gradient(circle, rgba(14, 165, 233, 0.12) 0%, rgba(56, 189, 248, 0.05) 50%, transparent 70%);
+}
+.dark .light-orb-4 {
+  background: radial-gradient(circle, rgba(34, 197, 94, 0.10) 0%, rgba(132, 204, 22, 0.04) 50%, transparent 70%);
+}
+
+.dark .hero-logo {
+  filter: drop-shadow(0 8px 32px rgba(99, 102, 241, 0.2));
 }
 
 /* ============================
@@ -31,6 +127,27 @@ body {
   pointer-events: none;
   overflow: hidden;
   background: linear-gradient(135deg, #EEF2FF 0%, #F0F4FF 30%, #FFF7ED 60%, #FDF2F8 100%);
+  opacity: 1;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .aurora-bg {
+  opacity: 0;
+}
+
+.aurora-bg-dark {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+  background: linear-gradient(135deg, #0B1120 0%, #0F172A 30%, #1A0F2E 60%, #0F172A 100%);
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.dark .aurora-bg-dark {
+  opacity: 1;
 }
 
 .aurora-bg::before {
@@ -115,6 +232,7 @@ body {
   box-shadow:
     0 4px 24px rgba(99, 102, 241, 0.06),
     inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-strong {
@@ -125,6 +243,7 @@ body {
   box-shadow:
     0 8px 32px rgba(99, 102, 241, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card {
@@ -135,7 +254,7 @@ body {
   box-shadow:
     0 4px 16px rgba(99, 102, 241, 0.05),
     inset 0 1px 0 rgba(255, 255, 255, 0.6);
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-card:hover {
@@ -156,6 +275,7 @@ body {
   -webkit-backdrop-filter: blur(20px) saturate(1.5);
   border: 1px solid transparent;
   overflow: hidden;
+  transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .glass-iridescent::before {
@@ -254,8 +374,8 @@ body {
    Custom Scrollbar
    ============================ */
 ::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: #F0F4FF; }
-::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+::-webkit-scrollbar-track { background: #F0F4FF; transition: background 0.6s ease; }
+::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; transition: background 0.6s ease; }
 ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
 
 /* ============================
@@ -397,57 +517,6 @@ body {
   opacity: 0;
   transform: translateY(-20px);
   filter: blur(4px);
-}
-
-/* ============================
-   Custom Cursor
-   ============================ */
-@media (pointer: fine) {
-  *, a, button, [role="button"], .cursor-pointer {
-    cursor: none !important;
-  }
-}
-
-.custom-cursor-container {
-  pointer-events: none;
-  position: fixed;
-  inset: 0;
-  z-index: 99999;
-  mix-blend-mode: difference;
-}
-
-.custom-cursor-ring {
-  position: fixed;
-  width: 32px;
-  height: 32px;
-  border: 1.5px solid rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  transition: width 0.3s, height 0.3s, border-color 0.3s, opacity 0.3s;
-  will-change: transform;
-}
-
-.custom-cursor-ring.hover {
-  width: 48px;
-  height: 48px;
-  border-color: rgba(255, 255, 255, 1);
-}
-
-.custom-cursor-dot {
-  position: fixed;
-  width: 8px;
-  height: 8px;
-  background: white;
-  border-radius: 50%;
-  will-change: transform;
-  transition: opacity 0.3s;
-}
-
-.custom-cursor-trail {
-  position: fixed;
-  background: rgba(255, 255, 255, 0.5);
-  border-radius: 50%;
-  will-change: transform;
-  pointer-events: none;
 }
 
 /* ============================

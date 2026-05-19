@@ -9,7 +9,7 @@
     <div class="max-w-6xl mx-auto px-6 relative">
       <div class="text-center mb-16 reveal-up" ref="headerRef">
         <p class="font-heading text-2xl text-accent italic mb-2">Selected works</p>
-        <h2 class="text-4xl md:text-5xl font-heading font-bold text-primary-800">项目作品</h2>
+        <h2 class="text-4xl md:text-5xl font-heading font-bold text-primary-800 dark:text-primary-100">项目作品</h2>
       </div>
 
       <div class="grid md:grid-cols-2 gap-6 lg:gap-8"
@@ -29,7 +29,7 @@
               </svg>
             </div>
 
-            <h3 class="text-xl font-heading font-bold text-primary-800 mb-3 group-hover:text-accent transition-colors duration-300">
+            <h3 class="text-xl font-heading font-bold text-primary-800 dark:text-primary-100 mb-3 group-hover:text-accent transition-colors duration-300">
               {{ project.name }}
             </h3>
             <p class="text-primary-500 text-sm leading-relaxed mb-6">

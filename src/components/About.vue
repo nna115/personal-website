@@ -5,13 +5,13 @@
     <div class="max-w-6xl mx-auto px-6">
       <div class="text-center mb-16 reveal-up" ref="headerRef">
         <p class="font-heading text-2xl text-accent italic mb-2">Get to know me</p>
-        <h2 class="text-4xl md:text-5xl font-heading font-bold text-primary-800">关于我</h2>
+        <h2 class="text-4xl md:text-5xl font-heading font-bold text-primary-800 dark:text-primary-100">关于我</h2>
       </div>
 
       <div class="grid md:grid-cols-2 gap-12 lg:gap-20 items-start">
         <div class="reveal-left" ref="bioRef">
           <div class="space-y-6">
-            <p class="text-lg text-primary-600 leading-relaxed">
+            <p class="text-lg text-primary-600 dark:text-primary-300 leading-relaxed">
               我是一名热爱前端开发的工程师，拥有丰富的 Vue 3 和 TypeScript 开发经验。
               擅长组件化开发和中后台系统建设，致力于打造高质量的用户界面。
             </p>
@@ -34,7 +34,7 @@
         </div>
 
         <div class="reveal-right" ref="skillsRef">
-          <h3 class="text-xl font-heading font-semibold text-primary-800 mb-6">技能栈</h3>
+          <h3 class="text-xl font-heading font-semibold text-primary-800 dark:text-primary-100 mb-6">技能栈</h3>
           <div class="flex flex-wrap gap-3">
             <span v-for="(skill, index) in skills" :key="skill"
               class="group px-4 py-2.5 rounded-2xl text-sm font-medium glass-card cursor-default reveal-up"
@@ -57,7 +57,7 @@
                 </svg>
               </div>
               <div>
-                <h4 class="font-heading font-semibold text-primary-800 mb-1">持续学习者</h4>
+                <h4 class="font-heading font-semibold text-primary-800 dark:text-primary-100 mb-1">持续学习者</h4>
                 <p class="text-sm text-primary-500 leading-relaxed">
                   保持对新技术的好奇心，不断探索前沿的前端技术与最佳实践。
                 </p>

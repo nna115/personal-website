@@ -13,10 +13,11 @@
       <!-- Desktop nav -->
       <div class="hidden md:flex items-center gap-8">
         <RouterLink v-for="item in navItems" :key="item.href" :to="item.href"
-          class="relative text-sm font-medium text-primary-500 hover:text-primary-800 transition-colors duration-300 py-1 group">
+          class="relative text-sm font-medium text-primary-500 hover:text-primary-800 transition-colors duration-300 py-1 group dark:text-primary-300 dark:hover:text-white">
           {{ item.label }}
           <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-gradient-to-r from-accent to-purple-500 rounded-full transition-all duration-500 group-hover:w-full"></span>
         </RouterLink>
+        <ThemeToggle />
       </div>
 
       <!-- Mobile menu button -->
@@ -51,6 +52,7 @@
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useMagnetic } from '../composables/useInteraction'
+import ThemeToggle from './ThemeToggle.vue'
 
 const scrolled = ref(false)
 const mobileOpen = ref(false)

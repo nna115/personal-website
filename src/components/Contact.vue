@@ -12,8 +12,8 @@
     <div class="max-w-4xl mx-auto px-6 text-center relative">
       <div class="reveal-up" ref="headerRef">
         <p class="font-heading text-2xl text-accent italic mb-2">Say hello</p>
-        <h2 class="text-4xl md:text-5xl font-heading font-bold text-primary-800 mb-6">联系我</h2>
-        <p class="text-lg text-primary-500 max-w-xl mx-auto leading-relaxed">
+        <h2 class="text-4xl md:text-5xl font-heading font-bold text-primary-800 dark:text-primary-100 mb-6">联系我</h2>
+        <p class="text-lg text-primary-500 dark:text-primary-400 max-w-xl mx-auto leading-relaxed">
           如果你有任何问题或合作意向，欢迎随时联系我。<br>
           我很期待与你的交流。
         </p>
@@ -32,7 +32,7 @@
           </div>
           <div class="text-left">
             <p class="text-xs text-primary-400 uppercase tracking-wider mb-0.5">Email</p>
-            <p class="text-sm font-semibold text-primary-800">{{ email }}</p>
+            <p class="text-sm font-semibold text-primary-800 dark:text-primary-100">{{ email }}</p>
           </div>
         </a>
 
@@ -48,7 +48,7 @@
           </div>
           <div class="text-left">
             <p class="text-xs text-primary-400 uppercase tracking-wider mb-0.5">GitHub</p>
-            <p class="text-sm font-semibold text-primary-800">{{ github.replace('https://github.com/', '') }}</p>
+            <p class="text-sm font-semibold text-primary-800 dark:text-primary-100">{{ github.replace('https://github.com/', '') }}</p>
           </div>
         </a>
       </div>
